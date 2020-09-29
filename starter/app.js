@@ -2,9 +2,39 @@
 // BUDGET CONTROLLER
 var budgetController = (function() {
 
-    // Some code
+    var Expense = function(id, description, value) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
+
+    var Income = function(id, description, value) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
+
+    var data = {
+        allItems: {
+            exp: [],
+            inc: []
+        },
+        totals: {
+            exp: 0,
+            inc: 0
+        }
+
+    }
 
 })();
+
+var Expense = function(id, description, value) {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+};
+
+
 
 // UI CONTROLLER
 var UIController = (function() {
@@ -19,7 +49,6 @@ var UIController = (function() {
  /* 
  This (below) is an "empty" object. It is assigned to the variable UIController (UIController.getinput()). Part of a bigger concept called the module pattern. 
  Returns the object assigned to UIController. This is a closure as well. 
-
  */
     return {                           
         getinput: function() {
@@ -43,13 +72,24 @@ var UIController = (function() {
 // GLOBAL APP CONTROLLER
 var controller = (function(budgetCtrl, UICtrl) {
     
-    var DOM = UICtrl.getDOMstrings();
+    var setupEventListeners = function() {
+        var DOM = UICtrl.getDOMstrings();
+
+        document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+
+        document.addEventListener('keypress', function(event) {
+            if (event.keycode === 13 || event.which === 13) {
+                ctrlAddItem();
+            }
+        }); 
+    };
+
+    
 
     var ctrlAddItem = function() {
 
         // 1. Get the field input data
         var input = UIController.getinput();
-        console.log(input);
 
         // 2. Add the item to the budget controller 
 
@@ -58,18 +98,17 @@ var controller = (function(budgetCtrl, UICtrl) {
         // 4. Calculate the budget
 
         // 5. Display the budget to the UI
+      
+    };
 
-        
-
-    }
-
-    document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
-
-    document.addEventListener('keypress', function(event) {
-
-        if (event.keycode === 13 || event.which === 13) {
-            ctrlAddItem();
+    return {
+        init: function() {
+            console.log('Application has started.');
+            setupEventListeners();
         }
-    });    
+    };
+       
 
 })(budgetController, UIController);
+
+controller.init();
