@@ -76,8 +76,8 @@ var UIController = (function() {
 
     var DOMstrings = {
         inputType: '.add__type',
-        descriptionType: '.add__description',
-        valueType: '.add__value',
+        inputDescription: '.add__description',
+        inputValue: '.add__value',
         inputBtn: ".add__btn",
         incomeContainer: '.income__list',
         expensesContainer: '.expenses__list'
@@ -89,10 +89,10 @@ var UIController = (function() {
  */
     return {                           
         getinput: function() {
-            return {
+            return { // empty object
                 type: document.querySelector(DOMstrings.inputType).value, // Will be either inc or exp
-                description: document.querySelector(DOMstrings.descriptionType).value,
-                value: document.querySelector(DOMstrings.valueType).value
+                description: document.querySelector(DOMstrings.inputDescription).value,
+                value: document.querySelector(DOMstrings.inputValue).value
             }
 
         },
@@ -121,6 +121,18 @@ var UIController = (function() {
             // Insert the HTML into the DOM
             document.querySelector(element).insertAdjacentHTML('beforeEnd', newHtml);
 
+        },
+
+        clearFields: function() {
+            var fields, fieldsArr;
+
+            fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
+
+            fieldsArr = Array.prototype.slice.call(fields); 
+
+            fieldsArr.forEach(function(current, index, array) {
+                current.value = "";
+            });
         },
 
         getDOMstrings: function() {
