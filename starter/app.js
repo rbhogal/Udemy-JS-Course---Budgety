@@ -69,6 +69,30 @@ var budgetController = (function() {
             return newItem; 
         },
 
+        deleteItem: function(type, id) {
+            var ids, index;
+
+            // id = 6
+            // data.allItems[type][id];
+            // ids = [1 2 4 6 8]
+            // index = 3
+
+            // map method populates a new array (ids) with whatever we return. This case the same current stuff. So makes a copy 
+            var ids = data.allItems[type].map(function(current) {  
+                return current.id;
+            });
+
+            // Gets the current index of array (that we want to replace and put in as argument) and stores it as index
+            index = ids.indexOf(id); // if id is 6, then the index would be 3
+
+            // Index can be -1 if it's not found in the array we're searching, so remove only if it exists
+            // Splice starts removes an element beginning at position indicated (index) and you tell it how many times (1)
+            if (index !== -1 ) {
+                data.allItems[type].splice(index, 1);
+            }   
+
+        },
+
         calculateBudget: function() {
 
             // calculate total income and expenses
@@ -179,6 +203,7 @@ var UIController = (function() {
 
             fieldsArr = Array.prototype.slice.call(fields); 
 
+            // loops over each element in fields array and replaces it with an empty string "". anonymous function and callback function used. 
             fieldsArr.forEach(function(current, index, array) {
                 current.value = "";
             });
@@ -266,16 +291,17 @@ var controller = (function(budgetCtrl, UICtrl) {
     var ctrlDeleteItem = function(event) {
         var itemID, splitID, type, ID;
 
-        itemID = event.target.parentNode.parentNode.parentNode.parentNode;
+        itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+
         if(itemID) {
 
-            //inc-1 
+            //inc-1 will split into type = inc, and ID = 1
             splitID = itemID.split('-');
             type = splitID[0];
-            ID = splitID[1];
+            ID = parseInt(splitID[1]);
 
             // 1. Delete the item from the data structure
-
+            budgetCtrl.deleteItem(type, ID);
             // 2. Delete the item from the UI
 
             // 3. Update and show the new budget
